@@ -2,7 +2,6 @@
 /* 
 Plugin Name: Manage Admin Menus
 Description: Tired of searching for an admin menu manager? This plugin will display a list of ALL active menus and allow Super Admin to select which ones should show depending on user capability. Super admin sees all menus, Administrators and lower dont.
-Version: 3.7.1
 Author: Laurence Tuck
 Version: 0.1
 Author URI: http://www.innate.co.za
@@ -73,6 +72,9 @@ class manage_admin_menus {
 			global $wp_roles, $blog_id; 
 		    $roles = $wp_roles->roles;
 			$current_role_selection = (isset($_POST['current_role_selection'])) ? $_POST['current_role_selection'] : 'administrator';		
+			
+			// show donate button
+			$this->MAM_donate();
 			
 			// display main admin option page 
 			?>
@@ -253,7 +255,10 @@ class manage_admin_menus {
 
 			// get saved option ?
 			$saved_network_settings = $this->is_network_forced();				
-			$network_checked = ( isset($saved_network_settings) && $saved_network_settings == 1) ? 'checked="checked"' : ""; ?>
+			$network_checked = ( isset($saved_network_settings) && $saved_network_settings == 1) ? 'checked="checked"' : ""; 
+			
+			// show donate button
+			$this->MAM_donate(); ?>
 			
 			<h2>Manage Admin Menus - Network Settings</h2>
 			<hr size="1" />
@@ -633,6 +638,19 @@ class manage_admin_menus {
 				
 			add_action('admin_menu', array(&$this, 'manage_admin_menus_kick'), 9999 ); /// seriously?!
 			add_action( 'admin_page_access_denied',  array(&$this, 'manage_menu_admin_denied'), 99 );
+		}
+
+		// create donate link
+		function MAM_donate(){
+			?>
+			<div class="mam_donate">
+				<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+					<input type="hidden" name="cmd" value="_s-xclick">
+					<input type="hidden" name="hosted_button_id" value="KF6VJKRA7HHEQ">
+					<input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
+					<img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
+				</form>
+			</div><?
 		}
 
 		
